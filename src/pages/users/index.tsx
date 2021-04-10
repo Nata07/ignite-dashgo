@@ -10,34 +10,12 @@ import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 import { useEffect } from "react";
 
-import { useQuery } from 'react-query'
-import { spawn } from "node:child_process";
+import { useUsers } from "../../services/hooks/useUsers";
+
 
 export default function UserList() {
 
-  const { data, isLoading, isFetching, error } = useQuery('users', async () => {
-    const response = await fetch('http://localhost:3000/api/users')
-    const data = await response.json();
-
-    const users = data.users.map(user => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        })
-      };
-    });
-
-    return users;
-  }, {
-    staleTime: 1000 * 5 // 5 seconds
-  })
-
-  console.log(data)
+  const { data, isLoading, isFetching, error } = useUsers();
 
   const isWideVersion = useBreakpointValue({
     base: false,
